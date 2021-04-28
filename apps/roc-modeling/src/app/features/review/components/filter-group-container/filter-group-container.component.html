@@ -1,0 +1,21 @@
+<section class="flex flex-col w-auto bg-white" style="min-width: 16rem;">
+  <div class="flex items-center text-xs font-bold leading-9 bg-gray-200">
+    <span
+      class="box-content w-5 h-5 ml-2 leading-relaxed text-center border border-black rounded-full"
+      >{{ stepNumber }}</span
+    >
+    <h3 class="px-2 uppercase">{{ name }}</h3>
+  </div>
+  <div class="px-5 my-2">
+    <div
+      class="flex items-start"
+      [ngClass]="{
+        'flex-col': column,
+        'flex-gap-y-2': column,
+        'flex-gap-x-6': !column
+      }"
+    >
+      <ng-content></ng-content>
+    </div>
+  </div>
+</section>

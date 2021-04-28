@@ -1,0 +1,59 @@
+<div *ngIf="!isSchoolFinderVisible && !isEntranceExamVisible">
+  <div class="flex justify-between w-full font-semibold text-2xs">
+    <span>{{ label }}</span>
+    <span>{{ value }}</span>
+  </div>
+
+  <mat-slider
+    (change)="onChange($event)"
+    (input)="onInput($event)"
+    color="primary"
+    [value]="value"
+    [min]="min"
+    [max]="max"
+    class="w-full"
+  ></mat-slider>
+</div>
+
+<div *ngIf="isSchoolFinderVisible && !isEntranceExamVisible">
+  <div class="flex justify-between w-full font-bold text-2xs">
+    {{ label }}
+  </div>
+  <div class="flex -mt-2">
+    <div class="flex-2">
+      <mat-slider
+        (change)="onChange($event)"
+        (input)="onInput($event)"
+        color="primary"
+        [value]="value"
+        [min]="min"
+        [max]="max"
+        class="w-full"
+      ></mat-slider>
+    </div>
+    <div class="flex-1 mt-3 text-xs font-semibold">
+      <span>> = {{ value }}%</span>
+    </div>
+  </div>
+</div>
+<div *ngIf="isEntranceExamVisible && !isSchoolFinderVisible">
+  <div class="flex justify-between w-full font-bold text-2xs">
+    {{ label }}
+  </div>
+  <div class="flex -mt-2">
+    <div class="flex-2">
+      <mat-slider
+        (change)="onChange($event)"
+        (input)="onInput($event)"
+        color="primary"
+        [value]="value"
+        [min]="min"
+        [max]="max"
+        class="w-full"
+      ></mat-slider>
+    </div>
+    <div class="flex-1 mt-3 text-xs font-semibold">
+      <span>{{ value }}</span>
+    </div>
+  </div>
+</div>

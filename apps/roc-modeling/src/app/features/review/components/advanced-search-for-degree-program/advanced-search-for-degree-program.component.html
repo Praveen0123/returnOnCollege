@@ -1,0 +1,151 @@
+<section>
+  <div class="grid grid-flow-col grid-rows-1 gap-2">
+    <!-- HEADING OF THE DIALOG BOX -->
+    <div class="flex-4">
+      <h1 class="font-bold">Search All Degree Programs</h1>
+    </div>
+
+    <!-- POPUP CLOSE ICON -->
+    <div class="ml-32 text-blue-600 cursor-pointer flex-4">
+      <mat-icon
+        aria-hidden="false"
+        aria-label="clear"
+        class="content-end pl-8 ml-6"
+        (click)="close()"
+        >clear</mat-icon
+      >
+    </div>
+  </div>
+</section>
+
+<!-- HORIZONTAL LINE -->
+<div class="border-t-2 border-colorApplication-horizontalLine"></div>
+
+<section class="relative w-full">
+  <form [formGroup]="advancedSearchForDegreeProgramsForm">
+    <!-- DROPDOWN AND INPUT FIELD -->
+
+    <div class="flex p-5 mt-5 space-x-6 bg-white shadow-md">
+      <div class="flex-6">
+        <mat-form-field class="w-full">
+          <mat-label>Degree Alignment with career</mat-label>
+          <mat-select
+            (selectionChange)="degreeAlignmentWithCareerSelected($event.value)"
+            formControlName="degreeAlignmentWithCareer"
+          >
+            <mat-option
+              [value]="option"
+              *ngFor="let option of degreeAlignmentWithCareer"
+              >{{ option }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="flex-6">
+        <mat-form-field class="w-full">
+          <mat-label>Degree Programs</mat-label>
+          <i
+            class="text-blue-600 fa fa-search"
+            aria-hidden="true"
+            matPrefix
+          ></i>
+          <input
+            matInput
+            placeholder="search any degree program"
+            #degreePrograms
+            formControlName="degreePrograms"
+          />
+          <button
+            mat-button
+            *ngIf="degreePrograms.value"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="degreePrograms.value = ''"
+          >
+            <fa-icon icon="times"></fa-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- TABLE FOR DEGREE PROGRAM -->
+
+    <div class="w-full mt-5">
+      <table mat-table class="w-full" [dataSource]="filterDegreeProgram">
+        <!-- Degree Program Column -->
+
+        <ng-container matColumnDef="Degree Program">
+          <th mat-header-cell *matHeaderCellDef>
+            <b class="text-black">Degree Program</b>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.degreeProgram }}
+          </td>
+        </ng-container>
+
+        <!-- Online Column -->
+        <ng-container matColumnDef="Online">
+          <th mat-header-cell *matHeaderCellDef>
+            <b class="text-black">Online</b>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <i
+              *ngIf="element.online == true"
+              class="fa fa-check"
+              aria-hidden="true"
+            ></i>
+          </td>
+        </ng-container>
+
+        <!-- Align Column -->
+        <ng-container matColumnDef="Align">
+          <th mat-header-cell *matHeaderCellDef>
+            <b class="text-black">Align</b>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <fa-icon
+              *ngIf="element.align == 'Recommended Programs'"
+              [icon]="['fas', 'signal']"
+            ></fa-icon>
+            <fa-icon
+              *ngIf="element.align == 'Closely Related Programs'"
+              [icon]="['fas', 'signal-4']"
+            ></fa-icon>
+            <fa-icon
+              *ngIf="element.align == 'Programs in a Related Field'"
+              [icon]="['fas', 'signal-3']"
+            ></fa-icon>
+            <fa-icon
+              *ngIf="element.align == 'Somewhat Related Field'"
+              [icon]="['fas', 'signal-2']"
+            ></fa-icon>
+
+            <fa-icon
+              *ngIf="element.align == 'Any Programs Regardless of Alignment'"
+              [icon]="['fas', 'signal-1']"
+            ></fa-icon>
+          </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="symbol">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="cursor-pointer"
+            (click)="captureDegreeProgram(element)"
+          >
+            <i class="text-blue-600 fa fa-plus" aria-hidden="true"></i>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+    </div>
+  </form>
+</section>

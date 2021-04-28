@@ -1,0 +1,93 @@
+<ng-container
+  *ngIf="{
+    zipCodeValueChanges: zipCodeValueChanges$ | async,
+    retirementAgeValueChanges: retirementAgeValueChanges$ | async
+  } as valueChanges"
+>
+  <form [formGroup]="careerGoalForm">
+    <roc-modeling-filter-group-container
+      name="Education Cost"
+      stepNumber="3"
+      [column]="true"
+    >
+      <mat-form-field class="w-full">
+        <div class="flex space-x-16">
+          <div class="flex-3">
+            <mat-label>School</mat-label>
+          </div>
+          <div class="flex-3">
+            <!-- SCHOOL FINDER BUTTON -->
+            <div
+              class="flex mr-1 space-x-1 cursor-pointer place-self-end"
+              (click)="openDialogSchoolFind()"
+            >
+              <div class="mt-1">
+                <span
+                  class="text-sm text-colorApplication-serachAllProgram material-icons"
+                >
+                  search
+                </span>
+              </div>
+              <div>
+                <span class="text-xs text-colorApplication-serachAllProgram">
+                  School Finder</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <mat-select
+          (selectionChange)="onGoalInstitutionSelected($event)"
+          placeholder="Enter school name"
+          formControlName="goalStateInstitution"
+        >
+          <mat-option
+            *ngFor="let institution of institutions"
+            [value]="institution"
+          >
+            {{ institution.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="w-full">
+        <mat-label>When do you plan to Start school?</mat-label>
+        <input matInput placeholder="yyyy" formControlName="startYear" />
+      </mat-form-field>
+      <div class="flex flex-col">
+        <div class="font-semibold text-2xs">
+          What is your dependency status?
+        </div>
+        <mat-radio-group
+          aria-label="select an option"
+          formControlName="dependencyStatus"
+          color="primary"
+          class="flex flex-gap-x-2"
+        >
+          <mat-radio-button [value]="0">Dependent</mat-radio-button>
+          <mat-radio-button [value]="1">Independent</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <mat-form-field class="w-full">
+        <mat-label>Annual Household Income</mat-label>
+        <mat-select
+          (selectionChange)="onAnnualHouseholdIncomeSelected($event)"
+          placeholder="Choose a degree"
+          formControlName="annualHouseholdBracket"
+        >
+          <mat-option [value]="1"><span>$0 - $30,000</span></mat-option>
+          <mat-option [value]="2"><span>$30,001 - $48,000</span></mat-option>
+          <mat-option [value]="3"><span>$48,001 - $75,000</span></mat-option>
+          <mat-option [value]="4"><span>$75,001 - $110,000</span></mat-option>
+          <mat-option [value]="5"><span>over $110,000</span></mat-option>
+        </mat-select>
+      </mat-form-field>
+    </roc-modeling-filter-group-container>
+  </form>
+  <div class="flex-gap-x-2">
+    <span (click)="openDialogREC()" class="Refine-text"
+      >Refine Education Cost</span
+    >
+    <i class="fa fa-exchange fa-1x exchange-color" aria-hidden="true"></i>
+  </div>
+</ng-container>

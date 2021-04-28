@@ -1,0 +1,42 @@
+:host {
+  display: block;
+}
+
+.my-class {
+  border-top: 3px solid #56b0b4;
+  border-right: 1px solid #d3d3d3;
+  border-bottom: 1px solid #d3d3d3;
+}
+
+.icon {
+  color: #0866a0;
+  cursor: pointer;
+}
+
+.mat-form-field {
+  width: 53%;
+  height: 5%;
+}
+
+.check-color {
+  color: #0866a0;
+  margin-left: -4px;
+}
+
+.cursor-style {
+  cursor: pointer;
+}
+.disable-width {
+  width: 15%;
+}
+
+.background {
+  background-color: #f6f6f6;
+  height: 39px;
+}
+
+input.mat-input-element {
+  background-color: white;
+  padding: 0;
+  margin: 0;
+}

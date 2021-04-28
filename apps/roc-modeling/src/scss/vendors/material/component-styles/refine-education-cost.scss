@@ -1,0 +1,17 @@
+.mat-form-field-appearance-outline {
+  width: 54px !important;
+  height: 0.22rem !important;
+  .mat-form-field-infix {
+    padding: 0;
+  }
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: black;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-flex {
+  padding: 0 0.75em 2px 0.75em !important;
+  margin-top: -0.25em !important;
+  position: relative !important;
+}

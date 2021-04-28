@@ -1,0 +1,54 @@
+<ng-container
+  *ngIf="{
+    userProfile: userProfile$ | async,
+    selectedCurrentOccupation: selectedCurrentOccupation$ | async,
+    selectedGoalOccupation: selectedGoalOccupation$ | async,
+    selectedInstructionalProgram: selectedInstructionalProgram$ | async,
+    instructionalPrograms: instructionalPrograms$ | async,
+    selectedInstitution: selectedInstitution$ | async,
+    institutions: institutions$ | async,
+    selectedRoiCalculatorOutputChartPlotData:
+      selectedRoiCalculatorOutputChartPlotData$ | async
+  } as inputOwner"
+>
+  <section class="flex h-full">
+    <!-- results view -->
+
+    <aside
+      class="relative w-64 bg-white shadow-md"
+   
+    >
+      <!-- <div
+        *ngIf="!inputOwner.selectedRoiCalculatorOutputChartPlotData"
+        class="absolute top-0 left-0 z-10 flex items-center justify-center w-full h-full bg-gray-500 opacity-50"
+      >
+        <fa-icon
+          class="text-4xl opacity-100"
+          [icon]="['fas', 'lock-alt']"
+        ></fa-icon>
+      </div> -->
+      <roc-modeling-career-goal-filters
+        [userProfile]="inputOwner.userProfile"
+        [selectedGoalOccupation]="inputOwner.selectedGoalOccupation"
+        [selectedInstructionalProgram]="inputOwner.selectedInstructionalProgram"
+        [instructionalPrograms]="inputOwner.instructionalPrograms"
+      ></roc-modeling-career-goal-filters>
+      <roc-modeling-education-cost-filters
+        [userProfile]="inputOwner.userProfile"
+        [selectedInstitution]="inputOwner.selectedInstitution"
+        [institutions]="inputOwner.institutions"
+      ></roc-modeling-education-cost-filters>
+    </aside>
+
+    <section class="flex flex-col flex-grow ml-4">
+      <roc-modeling-current-information-filters
+        [userProfile]="inputOwner.userProfile"
+        [selectedCurrentOccupation]="inputOwner.selectedCurrentOccupation"
+        class="flex-grow mr-4 shadow-md sm:flex-grow-0"
+      ></roc-modeling-current-information-filters>
+      <div class="px-5 py-4 mt-4 mr-4 bg-white shadow-md place-items-center">
+        <roc-modeling-lifetime-earnings></roc-modeling-lifetime-earnings>
+      </div>
+    </section>
+  </section>
+</ng-container>

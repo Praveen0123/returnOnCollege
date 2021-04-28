@@ -1,0 +1,12 @@
+overwrite: true
+schema: 'https://plwju26uc1.execute-api.us-east-2.amazonaws.com/dev/graphql'
+documents: 'apps/roc-modeling/src/app/core/graphql/**/*.graphql'
+generates:
+  apps/roc-modeling/src/generated/graphql.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-apollo-angular'
+  apps/roc-modeling/graphql.schema.json:
+    plugins:
+      - 'introspection'

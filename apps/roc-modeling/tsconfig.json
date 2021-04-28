@@ -1,0 +1,30 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./tsconfig.editor.json"
+    }
+  ],
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@models/*": ["apps/roc-modeling/src/app/core/models/*"],
+      "@core/*": ["apps/roc-modeling/src/app/core/*"],
+      "@features/*": ["apps/roc-modeling/src/app/features/*"],
+      "@shared/*": ["apps/roc-modeling/src/app/shared/*"],
+      "@state/*": ["apps/roc-modeling/src/app/+state/*"],
+      "@app/*": ["apps/roc-modeling/src/app/*"],
+      "@env/*": ["apps/roc-modeling/src/environments/*"],
+      "@gql": ["apps/roc-modeling/src/generated/graphql"]
+    }
+  }
+}

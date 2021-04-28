@@ -1,0 +1,96 @@
+<ng-container
+  *ngIf="{
+    zipCodeValueChanges: zipCodeValueChanges$ | async,
+    retirementAgeValueChanges: retirementAgeValueChanges$ | async
+  } as valueChanges"
+>
+  <form [formGroup]="careerGoalForm">
+    <roc-modeling-filter-group-container
+      name="Career Goal"
+      stepNumber="2"
+      [column]="true"
+    >
+      <mat-form-field class="w-full">
+        <mat-label>Desired Occupation</mat-label>
+        <input
+          matInput
+          placeholder="Keyword"
+          formControlName="goalStateOccupation"
+          [matAutocomplete]="autoGoalOnetCode"
+          #goalOnet
+        />
+        <button
+          mat-button
+          *ngIf="goalOnet.value"
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="goalOnet.value = ''"
+        >
+          <fa-icon icon="times"></fa-icon>
+        </button>
+        <mat-autocomplete
+          autoActiveFirstOption
+          #autoGoalOnetCode="matAutocomplete"
+          (optionSelected)="onGoalOnetCodeSelected($event)"
+          [displayWith]="displayOccupationFn"
+        >
+          <mat-option
+            *ngFor="let searchResult of filteredGoalOnetCodeSearchList$ | async"
+            [value]="searchResult"
+          >
+            {{ searchResult.title }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field class="w-full">
+        <mat-label>Degree to Pursue</mat-label>
+        <mat-select
+          (selectionChange)="onGoalInstructionalProgramSelected($event)"
+          placeholder="Choose a degree"
+          formControlName="goalStateInstructionalProgram"
+        >
+          <mat-option
+            *ngFor="let instructionalProgram of instructionalPrograms"
+            [value]="instructionalProgram"
+          >
+            {{ instructionalProgram.cipTitle }},
+            {{
+              shorthandNameForEmsiEducationLevel(
+                instructionalProgram.degreeLevel
+              )
+            }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="w-full">
+        <mat-label>Goal Zip Code</mat-label>
+        <input matInput placeholder="Zip Code" formControlName="goalZipCode" />
+      </mat-form-field>
+      <roc-slider
+        label="Retirement Age"
+        formControlName="retirementAge"
+        min="40"
+        max="70"
+        class="w-full"
+      ></roc-slider>
+    </roc-modeling-filter-group-container>
+  </form>
+
+  <!-- SEARCH ALL PROGRAMS BUTTON -->
+  <div
+    class="flex justify-end mr-5 space-x-1 cursor-pointer"
+    (click)="openDialogSearchAllProgram()"
+  >
+    <div class="mt-1">
+      <span class="text-sm text-blue-600 material-icons">
+        search
+      </span>
+    </div>
+    <div>
+      <span class="text-sm text-colorApplication-serachAllProgram font-sm">
+        Search All Programs</span
+      >
+    </div>
+  </div>
+</ng-container>

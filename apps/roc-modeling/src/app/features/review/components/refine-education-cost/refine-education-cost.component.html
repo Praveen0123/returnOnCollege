@@ -1,0 +1,415 @@
+<div class="flex">
+  <!-- heading of the dialog box -->
+  <h1><b>Refine Education Cost</b></h1>
+
+  <div class="icon pl-20 ml-40">
+    <mat-icon aria-hidden="false" aria-label="clear" (click)="close()"
+      >clear</mat-icon
+    >
+  </div>
+</div>
+
+<form [formGroup]="refineEducationCostForm" class="my-class">
+  <!-- Outstate student-->
+  <div class="flex flex-col mt-5">
+    <div class="text-sm flex-gap-x-4">
+      <h4 class="flex-gap-x-4">
+        Are you In-state or Out-of-state student?
+        <i class="fa fa-info-circle icon" aria-hidden="true"></i>
+      </h4>
+    </div>
+    <mat-radio-group
+      aria-label="select an option"
+      formControlName="state"
+      color="primary"
+      class="flex flex-gap-x-6"
+    >
+      <mat-radio-button [value]="0"><b>In-state</b></mat-radio-button>
+      <mat-radio-button [value]="1"><b>Out-of-state</b></mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <!-- Plan for living -->
+  <div class="mt-5 text-sm">
+    <h4>Where do you plan on living while in college?</h4>
+    <mat-form-field class="h-5 w-4 background">
+      <mat-select
+        (selectionChange)="campusSelected($event)"
+        formControlName="campus"
+        class="flex flex-gap-x-6 px-2"
+      >
+        <mat-option [value]="0"><span>On Campus</span></mat-option>
+        <mat-option [value]="1"><span>Off Campus</span></mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- COST ESTIMATE HEADING -->
+  <div class="bg-gray-100 text-sm mt-5 h-8 py-2 px-5">
+    <b>Your Estimated Cost for the 2020 -2021 year</b>
+  </div>
+
+  <!-- NET PRICE -->
+  <div class="flex flex-col" class="flex-gap-x-2">
+    <div class="mt-5 text-sm">
+      <b>Estimated Net Price</b>
+      .................................................................
+      <b> $12,261</b>
+    </div>
+    <div class="text-sm">
+      (Cost of Attendance minus Grants and Scholarships)
+    </div>
+  </div>
+  <hr class="mt-4" />
+
+  <!-- COST OF ATTENDENCE -->
+  <div class="flex flex-col text-sm mt-5 leading-loose">
+    <div class="flex-gap-x-2">
+      <span class="cursor-style" (click)="costToggle = !costToggle">
+        <b>Cost of Attendance</b> (In-State)
+        <span class="px-1">
+          <i
+            class="fa fa-caret-down"
+            aria-hidden="true"
+            *ngIf="!costToggle"
+          ></i>
+          <i class="fa fa-caret-up" aria-hidden="true" *ngIf="costToggle"></i>
+        </span>
+      </span>
+      ............................................ <b> $26,862</b>
+    </div>
+    <div *ngIf="costToggle" class="px-2">
+      <div class="flex-gap-x-2">
+        <span>Tuition and Fees</span>
+        ........................................................... $
+        <mat-form-field appearance="outline" *ngIf="!disableTuitionFees">
+          <input
+            matInput
+            #box
+            (change)="update(box.value)"
+            formControlName="tuitionFees"
+            [value]="tuitionFeesUpdate"
+            maxlength="5"
+            (keypress)="onlyNumber($event)"
+          />
+        </mat-form-field>
+        <input
+          [readonly]="disableTuitionFees"
+          matInput
+          class="disable-width"
+          *ngIf="disableTuitionFees"
+          value="11,931"
+        />
+        <i
+          class="fa fa-pencil-square-o icon"
+          aria-hidden="true"
+          (click)="tuitionFees()"
+        ></i>
+      </div>
+      <div class="flex-gap-x-2">
+        <span>Books and Supplies</span>
+        ...................................................... $
+        <mat-form-field appearance="outline" *ngIf="!disableBooksSupplies">
+          <input
+            matInput
+            formControlName="booksSupplies"
+            #box
+            (change)="update(box.value)"
+            [value]="booksSuppliesUpdate"
+            maxlength="5"
+            (keypress)="onlyNumber($event)"
+          />
+        </mat-form-field>
+        <input
+          [readonly]="disableBooksSupplies"
+          matInput
+          class="disable-width"
+          *ngIf="disableBooksSupplies"
+          value="1,125"
+        />
+        <i
+          class="fa fa-pencil-square-o icon"
+          aria-hidden="true"
+          (click)="booksSupplies()"
+        ></i>
+      </div>
+      <div class="flex-gap-x-2">
+        <span>Room and Board (OnCampus)</span>
+        ..................................... $
+
+        <mat-form-field appearance="outline" *ngIf="!disableRoomBoard">
+          <input
+            matInput
+            formControlName="roomBoard"
+            #box
+            (change)="update(box.value)"
+            [value]="roomBoardUpdate"
+            maxlength="5"
+            (keypress)="onlyNumber($event)"
+          />
+        </mat-form-field>
+        <input
+          [readonly]="disableRoomBoard"
+          matInput
+          class="disable-width"
+          *ngIf="disableRoomBoard"
+          value="11,450"
+        />
+        <i
+          class="fa fa-pencil-square-o icon"
+          aria-hidden="true"
+          (click)="roomBoard()"
+        ></i>
+      </div>
+
+      <div class="flex-gap-x-2">
+        <span>Other Expenses</span>
+        ............................................................. $
+        <mat-form-field appearance="outline" *ngIf="!disableOtherExpenses">
+          <input
+            matInput
+            formControlName="otherExpenses"
+            #box
+            (change)="update(box.value)"
+            [value]="otherExpensesUpdate"
+            maxlength="5"
+            (keypress)="onlyNumber($event)"
+          />
+        </mat-form-field>
+        <input
+          [readonly]="disableOtherExpenses"
+          matInput
+          class="disable-width"
+          *ngIf="disableOtherExpenses"
+          value="2,356"
+        />
+        <i
+          class="fa fa-pencil-square-o icon"
+          aria-hidden="true"
+          (click)="otherExpenses()"
+        ></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRANTS AND SCHOLARSHIPS -->
+  <div class="flex flex-col text-sm mt-5 leading-loose">
+    <div class="flex-gap-x-2">
+      <span class="cursor-style" (click)="grantsToggle = !grantsToggle">
+        <b>Grants and Scholarships</b>
+        <span class="px-2">
+          <i
+            class="fa fa-caret-down"
+            aria-hidden="true"
+            *ngIf="!grantsToggle"
+          ></i>
+          <i class="fa fa-caret-up" aria-hidden="true" *ngIf="grantsToggle"></i>
+        </span>
+      </span>
+
+      ................................................. <b>$14,601</b>
+    </div>
+    <div *ngIf="grantsToggle" class="px-2">
+      <div class="flex-gap-x-2">
+        <span>Federal Pell Grant </span>
+        <span class="check-color">(Check if you are eligible ?)</span
+        >............. $
+        <mat-form-field appearance="outline" *ngIf="!disableFederalPellGrant">
+          <input
+            formControlName="federalPellGrant"
+            matInput
+            #box
+            (change)="update(box.value)"
+            [value]="federalPellGrantUpdate"
+            maxlength="5"
+            (keypress)="onlyNumber($event)"
+          />
+        </mat-form-field>
+        <input
+          [readonly]="disableFederalPellGrant"
+          matInput
+          class="disable-width"
+          *ngIf="disableFederalPellGrant"
+          value="4,441"
+        />
+        <i
+          class="fa fa-pencil-square-o icon"
+          aria-hidden="true"
+          (click)="federalPellGrant()"
+        ></i>
+      </div>
+      <div class="flex-gap-x-2">
+        <span>Other Federal Grants (not loans) </span
+        >.................................. $
+        <mat-form-field appearance="outline" *ngIf="!disableotherFederalGrant">
+          <input
+            formControlName="otherFederalGrant"
+            matInput
+            #box
+            (change)="update(box.value)"
+            [value]="otherFederalGrantUpdate"
+            maxlength="5"
+            (keypress)="onlyNumber($event)"
+          />
+        </mat-form-field>
+        <input
+          [readonly]="disableotherFederalGrant"
+          matInput
+          class="disable-width"
+          *ngIf="disableotherFederalGrant"
+          value="1,033"
+        />
+        <i
+          class="fa fa-pencil-square-o icon"
+          aria-hidden="true"
+          (click)="otherFederalGrant()"
+        ></i>
+      </div>
+      <div class="flex-gap-x-2">
+        <span>State or Local Grants or scholarships</span
+        >........................... $
+        <mat-form-field appearance="outline" *ngIf="!disablestateLocalGrants">
+          <input
+            formControlName="stateLocalGrants"
+            matInput
+            #box
+            (change)="update(box.value)"
+            [value]="stateLocalGrantsUpdate"
+            maxlength="5"
+            (keypress)="onlyNumber($event)"
+          />
+        </mat-form-field>
+        <input
+          [readonly]="disablestateLocalGrants"
+          matInput
+          class="disable-width"
+          *ngIf="disablestateLocalGrants"
+          value="2,170"
+        />
+        <i
+          class="fa fa-pencil-square-o icon"
+          aria-hidden="true"
+          (click)="stateLocalGrants()"
+        ></i>
+      </div>
+      <div class="flex-gap-x-2">
+        <span>Institutional Grants or scholarships</span
+        >............................. $
+        <mat-form-field
+          appearance="outline"
+          *ngIf="!disableInstitutionalGrants"
+        >
+          <input
+            formControlName="institutionalGrants"
+            matInput
+            #box
+            (change)="update(box.value)"
+            [value]="institutionalGrantsUpdate"
+            maxlength="5"
+            (keypress)="onlyNumber($event)"
+          />
+        </mat-form-field>
+
+        <input
+          [readonly]="disableInstitutionalGrants"
+          matInput
+          class="disable-width"
+          *ngIf="disableInstitutionalGrants"
+          value="6,957"
+        />
+        <i
+          class="fa fa-pencil-square-o icon"
+          aria-hidden="true"
+          (click)="institutionalGrants()"
+        ></i>
+      </div>
+      <div class="flex-gap-x-2">
+        <span>Other Grants or scholarships</span
+        >........................................ $
+        <mat-form-field
+          appearance="outline"
+          *ngIf="!disableOtherGrantsScholarships"
+        >
+          <input
+            formControlName="otherGrantsScholarships"
+            matInput
+            #box
+            (change)="update(box.value)"
+            [value]="otherGrantsScholarshipsupdate"
+            maxlength="5"
+            (keypress)="onlyNumber($event)"
+          />
+        </mat-form-field>
+        <input
+          [readonly]="disableOtherGrantsScholarships"
+          matInput
+          class="disable-width"
+          *ngIf="disableOtherGrantsScholarships"
+          value="0"
+        />
+        <i
+          class="fa fa-pencil-square-o icon"
+          aria-hidden="true"
+          (click)="otherGrantsScholarships()"
+        ></i>
+      </div>
+      <div class="flex-gap-x-2">
+        <span>Post-9/11 G.I.Bill Benefits</span
+        >.............................................. $
+        <mat-form-field appearance="outline" *ngIf="!disablePostBenefits">
+          <input
+            formControlName="postBenefits"
+            matInput
+            #box
+            (change)="update(box.value)"
+            [value]="postBenefitsUpdate"
+            maxlength="5"
+            (keypress)="onlyNumber($event)"
+          />
+        </mat-form-field>
+        <input
+          [readonly]="disablePostBenefits"
+          matInput
+          class="disable-width"
+          *ngIf="disablePostBenefits"
+          value="0"
+        />
+        <i
+          class="fa fa-pencil-square-o icon"
+          aria-hidden="true"
+          (click)="postBenefits()"
+        ></i>
+      </div>
+      <div class="flex-gap-x-2">
+        <span> DoD Tuition Assistance Program Benefits</span
+        >.................... $
+        <mat-form-field
+          appearance="outline"
+          *ngIf="!disableDodTuitionAssistance"
+        >
+          <input
+            formControlName="dodTuitionAssistance"
+            matInput
+            #box
+            (change)="update(box.value)"
+            [value]="dodTuitionAssistanceUpdate"
+            maxlength="5"
+            (keypress)="onlyNumber($event)"
+          />
+        </mat-form-field>
+        <input
+          [readonly]="disableDodTuitionAssistance"
+          matInput
+          class="disable-width"
+          *ngIf="disableDodTuitionAssistance"
+          value="0"
+        />
+        <i
+          class="fa fa-pencil-square-o icon"
+          aria-hidden="true"
+          (click)="dodTuitionAssistance()"
+        ></i>
+      </div>
+    </div>
+  </div>
+</form>

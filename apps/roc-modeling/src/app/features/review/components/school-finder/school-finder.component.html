@@ -1,0 +1,371 @@
+<section>
+  <div class="grid grid-flow-col grid-rows-1 gap-2">
+    <!-- HEADING OF THE DIALOG BOX -->
+    <div class="flex-4">
+      <h1 class="font-bold">School Finder</h1>
+    </div>
+
+    <!-- POPUP CLOSE ICON -->
+    <div class="ml-64 text-blue-600 cursor-pointer flex-4">
+      <mat-icon
+        aria-hidden="false"
+        aria-label="clear"
+        class="content-end pl-20 ml-64"
+        (click)="close()"
+        >clear</mat-icon
+      >
+    </div>
+  </div>
+</section>
+
+<!-- HORIZONTAL LINE -->
+<div class="border-t-2 border-colorApplication-horizontalLine"></div>
+
+<section class="relative w-full">
+  <form [formGroup]="schoolFinderForm">
+    <!-- FILTERS -->
+
+    <div class="mt-5 shadow-md">
+      <div class="grid grid-flow-col grid-rows-1 gap-4 pt-5 pl-5 pr-5">
+        <!-- SCHOOL NAME FILTER -->
+        <div class="flex-3">
+          <mat-form-field class="w-full">
+            <mat-label>Search School Name</mat-label>
+            <i
+              class="text-blue-600 fa fa-search"
+              aria-hidden="true"
+              matPrefix
+            ></i>
+            <input
+              matInput
+              placeholder="School Name"
+              formControlName="schoolName"
+              [matAutocomplete]="autoschoolName"
+            />
+            <button
+              mat-button
+              *ngIf="schoolFinderForm.controls.schoolName.dirty"
+              matSuffix
+              mat-icon-button
+              aria-label="Clear"
+              (click)="clearSearchFieldSchoolName()"
+            >
+              <fa-icon icon="times"></fa-icon>
+            </button>
+
+            <mat-autocomplete
+              autoActiveFirstOption
+              #autoschoolName="matAutocomplete"
+              [displayWith]="displayWithSchoolName"
+              (optionSelected)="onschoolNameSelected($event)"
+            >
+              <mat-option
+                *ngFor="let schoolName of filteredSchoolName | async"
+                [value]="schoolName"
+              >
+                {{ schoolName }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <!-- LOCATION FILTER -->
+        <div class="w-24 flex-3">
+          <mat-form-field class="w-full">
+            <mat-label>Location</mat-label>
+
+            <input
+              matInput
+              placeholder="Zip or city,State"
+              formControlName="location"
+            />
+          </mat-form-field>
+        </div>
+
+        <!-- DISTANCE FILTER -->
+        <div class="w-12 ml-6 flex-3">
+          <mat-form-field class="w-full">
+            <mat-label>Distance</mat-label>
+            <input
+              matInput
+              placeholder="50 Miles"
+              formControlName="distance"
+              [matAutocomplete]="autoDistance"
+            />
+            <button
+              mat-button
+              *ngIf="schoolFinderForm.controls.distance.dirty"
+              matSuffix
+              mat-icon-button
+              aria-label="Clear"
+              (click)="clearSearchFieldDistance()"
+            >
+              <fa-icon icon="times"></fa-icon>
+            </button>
+
+            <mat-autocomplete
+              autoActiveFirstOption
+              #autoDistance="matAutocomplete"
+              [displayWith]="displayWithDistance"
+              (optionSelected)="ondistanceSelected($event)"
+            >
+              <mat-option
+                *ngFor="let distance of filteredDistance | async"
+                [value]="distance"
+              >
+                {{ distance }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <!-- DEGREE ALIGNMENT FILTER -->
+        <div class="flex-3">
+          <mat-form-field class="w-full">
+            <mat-label>Degree Alignment with career</mat-label>
+            <mat-select
+              (selectionChange)="
+                degreeAlignmentWithCareerSelected($event.value)
+              "
+              placeholder="Select Alignment"
+              formControlName="degreeAlignmentWithCareer"
+            >
+              <mat-option
+                [value]="option"
+                *ngFor="let option of degreeAlignmentWithCareer"
+                >{{ option }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- CHECKBOX FILTERS -->
+      <div class="grid grid-flow-col grid-rows-1 gap-1 pl-5 pr-2">
+        <!-- Graduation Rate FILTER -->
+        <div class="flex-2">
+          <roc-slider
+            label="Graduation Rate"
+            formControlName="graduationRate"
+            min="0"
+            max="100"
+            class="font-bold"
+            [isSchoolFinderVisible]="true"
+            (valueChanges)="filterGraduationRate($event)"
+          ></roc-slider>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <!-- AVAILABLE ONLINE FILTER -->
+          <div class="w-2 mt-3 flex-3">
+            <mat-checkbox
+              color="primary"
+              formControlName="AvailableOnline"
+              (change)="addFilterAvailableOnline()"
+              >Available Online</mat-checkbox
+            >
+          </div>
+          <!-- ENTRANCE EXAMS FILTER -->
+          <div class="flex-2">
+            <mat-form-field class="w-32">
+              <mat-label>Entrance Exams</mat-label>
+              <mat-select
+                class="-mt-2"
+                placeholder="Select"
+                formControlName="entranceExam"
+                (selectionChange)="entranceSelected($event.value)"
+              >
+                <mat-option
+                  [value]="option"
+                  *ngFor="let option of entranceExams"
+                  >{{ option }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- SAT COMBINED SCORE EXAMS FILTER -->
+
+          <div class="flex-3" *ngIf="entranceSelectedValue == 'SAT Score'">
+            <roc-slider
+              label="SAT Combined Score"
+              formControlName="satCombinedScore"
+              min="400"
+              max="1600"
+              class="font-semibold"
+              [isEntranceExamVisible]="true"
+              (valueChanges)="filterSatScore($event)"
+            ></roc-slider>
+          </div>
+          <div class="flex-3" *ngIf="entranceSelectedValue == 'ACT Score'">
+            <roc-slider
+              label="ACT Combined Score"
+              formControlName="actCombinedScore"
+              min="1"
+              max="36"
+              class="font-bold"
+              [isEntranceExamVisible]="true"
+              (valueChanges)="filterACTScore($event)"
+            ></roc-slider>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLE FOR SCHOOL FINDER -->
+
+    <div class="w-full mt-5">
+      <table mat-table class="w-full" [dataSource]="filterDegreeProgram">
+        <!-- College Name Column -->
+
+        <ng-container matColumnDef="College Name">
+          <th mat-header-cell *matHeaderCellDef>
+            <b class="text-black">College Name</b>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.collegeName }}
+          </td>
+        </ng-container>
+
+        <!-- Open Admission Column -->
+        <ng-container matColumnDef="Open Admission">
+          <th mat-header-cell *matHeaderCellDef>
+            <b class="text-black"
+              >Open Admission <i class="fa fa-sort" aria-hidden="true"></i
+            ></b>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <i
+              *ngIf="element.openAdmission"
+              class="fa fa-check"
+              aria-hidden="true"
+            ></i>
+          </td>
+        </ng-container>
+
+        <!-- Online Column -->
+        <ng-container matColumnDef="Online">
+          <th mat-header-cell *matHeaderCellDef>
+            <b class="text-black"
+              >Online <i class="fa fa-sort" aria-hidden="true"></i
+            ></b>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <i
+              *ngIf="element.online == true"
+              class="fa fa-check"
+              aria-hidden="true"
+            ></i>
+          </td>
+        </ng-container>
+
+        <!-- Distance Column -->
+        <ng-container matColumnDef="Distance">
+          <th mat-header-cell *matHeaderCellDef>
+            <b class="text-black"
+              >Distance <i class="fa fa-sort" aria-hidden="true"></i
+            ></b>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.distance }}
+          </td>
+        </ng-container>
+
+        <!-- Align Column -->
+        <ng-container matColumnDef="Align">
+          <th mat-header-cell *matHeaderCellDef>
+            <b class="text-black"
+              >Align <i class="fa fa-sort" aria-hidden="true"></i
+            ></b>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <fa-icon
+              *ngIf="element.align == 'Recommended Programs'"
+              [icon]="['fas', 'signal']"
+            ></fa-icon>
+            <fa-icon
+              *ngIf="element.align == 'Closely Related Programs'"
+              [icon]="['fas', 'signal-4']"
+            ></fa-icon>
+            <fa-icon
+              *ngIf="element.align == 'Programs in a Related Field'"
+              [icon]="['fas', 'signal-3']"
+            ></fa-icon>
+            <fa-icon
+              *ngIf="element.align == 'Somewhat Related Field'"
+              [icon]="['fas', 'signal-2']"
+            ></fa-icon>
+
+            <fa-icon
+              *ngIf="element.align == 'Any Programs Regardless of Alignment'"
+              [icon]="['fas', 'signal-1']"
+            ></fa-icon>
+          </td>
+        </ng-container>
+
+        <!-- Graduation Rate Column -->
+        <ng-container matColumnDef="Graduation Rate">
+          <th mat-header-cell *matHeaderCellDef>
+            <b class="text-black"
+              >Graduation Rate <i class="fa fa-sort" aria-hidden="true"></i
+            ></b>
+          </th>
+          <td mat-cell *matCellDef="let element" class="pl-5">
+            {{ element.graduationRate }}%
+          </td>
+        </ng-container>
+
+        <!-- SAT Column -->
+        <ng-container matColumnDef="SAT">
+          <th mat-header-cell *matHeaderCellDef>
+            <b class="text-black"
+              >SAT <i class="fa fa-sort" aria-hidden="true"></i
+            ></b>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span *ngIf="element.sat.start != 0">
+              {{ element.sat.start }}-{{ element.sat.end }}
+            </span>
+            <span *ngIf="element.sat.start == 0"
+              ><span class="ml-4">--</span></span
+            >
+          </td>
+        </ng-container>
+
+        <!-- ACT Column -->
+        <ng-container matColumnDef="ACT">
+          <th mat-header-cell *matHeaderCellDef>
+            <b class="text-black"
+              >ACT <i class="fa fa-sort" aria-hidden="true"></i
+            ></b>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span *ngIf="element.act.start != 0">
+              {{ element.act.start }}-{{ element.act.end }}
+            </span>
+            <span *ngIf="element.act.start == 0"
+              ><span class="ml-2">--</span></span
+            >
+          </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="symbol">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="pl-5 cursor-pointer"
+            (click)="captureDegreeProgram(element)"
+          >
+            <i class="text-blue-600 fa fa-plus" aria-hidden="true"></i>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+    </div>
+  </form>
+</section>

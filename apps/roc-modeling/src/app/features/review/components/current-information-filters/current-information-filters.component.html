@@ -1,0 +1,79 @@
+<form [formGroup]="currentInformationForm" (ngSubmit)="onSubmit()">
+  <roc-modeling-filter-group-container
+    name="Current Information"
+    stepNumber="1"
+    [column]="false"
+  >
+    <roc-slider
+      label="Current Age"
+      formControlName="currentAge"
+      min="18"
+      max="70"
+    ></roc-slider>
+    <mat-form-field>
+      <mat-label>Current Occupation</mat-label>
+      <input
+        matInput
+        placeholder="Keyword"
+        formControlName="currentStateOccupation"
+        [matAutocomplete]="autoCurrentOnetCode"
+        #currentOnet
+      />
+      <button
+        mat-button
+        *ngIf="currentOnet.value"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="currentOnet.value = ''"
+      >
+        <fa-icon icon="times"></fa-icon>
+      </button>
+      <mat-autocomplete
+        autoActiveFirstOption
+        #autoCurrentOnetCode="matAutocomplete"
+        (optionSelected)="onCurrentOnetCodeSelected($event)"
+        [displayWith]="displayOccupationFn"
+      >
+        <mat-option
+          *ngFor="
+            let searchResult of filteredCurrentOnetCodeSearchList$ | async
+          "
+          [value]="searchResult"
+        >
+          {{ searchResult.title }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-checkbox
+      class="self-center"
+      color="primary"
+      formControlName="notWorking"
+      >Not working</mat-checkbox
+    >
+    <div class="flex flex-col">
+      <div class="font-semibold text-2xs">Current Degree</div>
+      <mat-radio-group
+        aria-label="select an option"
+        formControlName="startDegreeLevel"
+        color="primary"
+        class="flex flex-col"
+      >
+        <mat-radio-button [value]="0">High School</mat-radio-button>
+        <mat-radio-button [value]="1">Associates</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <mat-form-field>
+      <mat-label>Current Zip Code</mat-label>
+      <input matInput placeholder="Zip Code" formControlName="currentZipCode" />
+    </mat-form-field>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      class="self-center uppercase"
+    >
+      Calculate
+    </button>
+  </roc-modeling-filter-group-container>
+</form>
